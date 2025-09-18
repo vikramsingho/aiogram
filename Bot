@@ -1,0 +1,25 @@
+from aiogram import Bot, Dispatcher, types
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.filters import Command
+import asyncio
+TOKEN = '8344000218:AAE1AoYApNgkRFyPDkYX6BeilY9YrliBEDc'
+bot = Bot(token=TOKEN)
+dp = Dispatcher()
+# Define buttons
+button1 = InlineKeyboardButton(text="Insta View", callback_data="insta_view")
+button2 = InlineKeyboardButton(text="My Balance", callback_data="my_balance")
+keyboard = InlineKeyboardMarkup(inline_keyboard=[[button1, button2]])
+
+@dp.message(Command("start"))
+async def start(message: types.Message):
+    await message.answer("Welcome! Choose an option:", reply_markup=keyboard)
+
+@dp.callback_query(lambda c: c.data == "insta_view")
+async def process_insta_view(callback_query: types.CallbackQuery):
+    await callback_query.message.answer("Please send your reel link!")
+
+async def main():
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())
